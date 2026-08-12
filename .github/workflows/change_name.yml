@@ -1,0 +1,36 @@
+name: Ganti Nama Member Discord
+
+on:
+  workflow_dispatch:
+    inputs:
+      user_id:
+        description: 'Discord User ID (Contoh: 123456789012345678)'
+        required: true
+        type: string
+      new_ign:
+        description: 'IGN Baru (Contoh: HanzyPro)'
+        required: true
+        type: string
+
+jobs:
+  update-nickname:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install discord.js
+
+      - name: Run Nickname Script
+        env:
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID }}
+          TARGET_USER_ID: ${{ inputs.user_id }}
+          NEW_IGN: ${{ inputs.new_ign }}
+        run: node change_name.js
